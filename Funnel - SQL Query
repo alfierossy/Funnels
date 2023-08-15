@@ -1,0 +1,45 @@
+Unique Events							
+WITH numbered_events AS (							
+SELECT							
+event_date,							
+event_timestamp,							
+event_name,							
+event_value_in_usd,							
+user_id,							
+user_pseudo_id,							
+user_first_touch_timestamp,							
+category,							
+mobile_model_name,							
+operating_system,							
+language,							
+is_limited_ad_tracking,							
+browser,							
+browser_version,							
+country,							
+medium,							
+name,							
+traffic_source,							
+platform,							
+total_item_quantity,							
+purchase_revenue_in_usd,							
+refund_value_in_usd,							
+shipping_value_in_usd,							
+tax_value_in_usd,							
+transaction_id,							
+page_title,							
+page_location,							
+source,							
+page_referrer,							
+campaign,							
+							
+-- Assign a row number to each event for each user_pseudo_id and event_name							
+ROW_NUMBER() OVER (PARTITION BY user_pseudo_id, event_name ORDER BY event_timestamp) AS row_num							
+							
+FROM `turing_data_analytics.raw_events`							
+)							
+							
+-- Select only the rows that have row_num = 1							
+SELECT * FROM numbered_events							
+WHERE row_num = 1							
+ORDER BY event_timestamp							
+							
